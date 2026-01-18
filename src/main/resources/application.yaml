@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: shobby
+  datasource:
+    url: jdbc:mysql://localhost:3306/shobby
+    username: root
+    password: 2001
+  jpa:
+    show-sql: true
+  redis:
+    host: localhost
+    port: 6379
+
+server:
+  port: 8080
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+
+
+app:
+  security:
+    secret-key: ${SECRET_KEY}
+    access-token-expiration: 15
