@@ -1,7 +1,9 @@
 package com.shobby.auth.exception;
 
-public class UserAlreadyExistsException extends RuntimeException {
+import com.shobby.common.exception.CustomException;
+
+public class UserAlreadyExistsException extends CustomException {
     public UserAlreadyExistsException(String message) {
-        super(message);
+        super(500, message);
     }
 }

@@ -1,7 +1,9 @@
 package com.shobby.security.jwt;
 
-public class InvalidRefreshTokenException extends RuntimeException {
+import com.shobby.common.exception.CustomException;
+
+public class InvalidRefreshTokenException extends CustomException {
     public InvalidRefreshTokenException(String message) {
-        super(message);
+        super(800, message);
     }
 }

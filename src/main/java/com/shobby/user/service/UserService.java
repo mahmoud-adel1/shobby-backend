@@ -26,7 +26,7 @@ public class UserService {
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Invalid request due to data integrity constraints.");
         } catch (Exception e) {
-            throw new DatabaseErrorException("Something went wrong. Please try again later.");
+            throw new DatabaseErrorException(460,"Something went wrong. Please try again later.");
         }
     }
 

@@ -1,7 +1,11 @@
 package com.shobby.auth.exception;
 
-public class UserNotFoundException extends RuntimeException {
+import com.shobby.common.exception.CustomException;
+import lombok.Getter;
+
+@Getter
+public class UserNotFoundException extends CustomException {
     public UserNotFoundException(String message) {
-        super(message);
+        super(520, message);
     }
 }

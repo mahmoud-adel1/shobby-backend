@@ -1,7 +1,9 @@
 package com.shobby.security.config;
 
-public class PasswordNotMatchedException extends RuntimeException {
+import com.shobby.common.exception.CustomException;
+
+public class PasswordNotMatchedException extends CustomException {
     public PasswordNotMatchedException(String message) {
-        super(message);
+        super(720, message);
     }
 }
