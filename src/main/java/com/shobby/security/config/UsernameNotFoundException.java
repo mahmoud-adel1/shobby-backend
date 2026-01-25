@@ -1,9 +1,10 @@
 package com.shobby.security.config;
 
-import com.shobby.common.exception.CustomException;
+import com.shobby.common.exception.ErrorCode;
+import com.shobby.common.exception.GeneralException;
 
-public class UsernameNotFoundException extends CustomException {
-    public UsernameNotFoundException(String message) {
-        super(700, message);
+public class UsernameNotFoundException extends GeneralException {
+    public UsernameNotFoundException() {
+        super(ErrorCode.USERNAME_NOT_FOUND);
     }
 }

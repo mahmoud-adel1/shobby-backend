@@ -5,13 +5,12 @@ import com.shobby.auth.dto.internal.RefreshResult;
 import com.shobby.auth.dto.internal.RegisterResult;
 import com.shobby.auth.dto.request.LoginRequestDto;
 import com.shobby.auth.dto.request.RegisterRequestDto;
-import com.shobby.auth.exception.UserAlreadyExistsException;
-import com.shobby.auth.exception.UserNotFoundException;
+import com.shobby.auth.exception.AuthUserAlreadyExistsException;
 import com.shobby.auth.mapper.UserRegisterMapper;
 import com.shobby.role.enums.RoleType;
 import com.shobby.role.service.RoleService;
 import com.shobby.security.config.CustomUserDetails;
-import com.shobby.security.jwt.InvalidRefreshTokenException;
+import com.shobby.security.jwt.RefreshTokenInvalidException;
 import com.shobby.security.jwt.JwtService;
 import com.shobby.security.jwt.RefreshTokenService;
 import com.shobby.user.entity.User;
@@ -20,14 +19,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,15 +40,15 @@ public class AuthService {
     public RegisterResult register(RegisterRequestDto registerRequest) {
 
         if (userService.isUserExistByUsername(registerRequest.getUsername())) {
-            throw new UserAlreadyExistsException("Username: " + registerRequest.getUsername() + " is already exists.");
+            throw new AuthUserAlreadyExistsException();
         }
 
         if (userService.isUserExistByEmail(registerRequest.getEmail())) {
-            throw new UserAlreadyExistsException("Email: " + registerRequest.getEmail() + " is already exists.");
+            throw new AuthUserAlreadyExistsException();
         }
 
         if (userService.isUserExistByMobileNumber(registerRequest.getMobileNumber())) {
-            throw new UserAlreadyExistsException("Mobile number: " + registerRequest.getMobileNumber() + " is already exists.");
+            throw new AuthUserAlreadyExistsException();
         }
 
         User user = UserRegisterMapper.mapToUser(registerRequest);
@@ -89,7 +86,7 @@ public class AuthService {
                 }
             }
         }
-        throw new InvalidRefreshTokenException("Invalid refresh token.");
+        throw new RefreshTokenInvalidException();
     }
 
     public LoginResult login(LoginRequestDto loginRequest) {

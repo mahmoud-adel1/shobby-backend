@@ -4,144 +4,52 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
-
-
-//    @ExceptionHandler(UsernameNotFoundException.class)
-//    public ResponseEntity<ApiError> handleUsernameNotFoundException(UsernameNotFoundException exception,
-//                                                                    HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(),
-//                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.UNAUTHORIZED)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(EnumConstantNotPresentException.class)
-//    public ResponseEntity<ApiError> handleEnumConstantNotPresentException(EnumConstantNotPresentException exception,
-//                                                                    HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(),
-//                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.UNAUTHORIZED)
-//                .body(apiError);
-//    }
-//
-//
-//    @ExceptionHandler(PasswordNotMatchedException.class)
-//    public ResponseEntity<ApiError> handlePasswordNotMatchedException(PasswordNotMatchedException exception,
-//                                                                    HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(),
-//                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.UNAUTHORIZED)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(InvalidRefreshTokenException.class)
-//    public ResponseEntity<ApiError> handleInvalidRefreshTokenException(InvalidRefreshTokenException exception,
-//                                                                       HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(),
-//                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.UNAUTHORIZED)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(UserNotFoundException.class)
-//    public ResponseEntity<ApiError> handleUserNotFoundException(UserNotFoundException exception,
-//                                                                       HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(),
-//                HttpStatus.NOT_FOUND.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(RoleNotFoundException.class)
-//    public ResponseEntity<ApiError> handleRoleNotFoundExceptionException(RoleNotFoundException exception,
-//                                                                       HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(),
-//                HttpStatus.NOT_FOUND.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(DataIntegrityViolationException.class)
-//    public ResponseEntity<ApiError> handleDataIntegrityViolationException(DataIntegrityViolationException exception,
-//                                                                          HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(),
-//                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.BAD_REQUEST)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(DatabaseErrorException.class)
-//    public ResponseEntity<ApiError> handleDatabaseErrorException(DatabaseErrorException exception,
-//                                                                          HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-//                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                .body(apiError);
-//    }
-//
-//    @ExceptionHandler(DisabledException.class)
-//    public ResponseEntity<ApiError> handleDisabledException(DisabledException exception,
-//                                                                          HttpServletRequest request) {
-//        ApiError apiError = new ApiError(HttpStatus.FORBIDDEN.value(),
-//                HttpStatus.FORBIDDEN.getReasonPhrase(),
-//                exception.getMessage(),
-//                request.getRequestURI(),
-//                Instant.now());
-//        return ResponseEntity
-//                .status(HttpStatus.FORBIDDEN)
-//                .body(apiError);
-//    }
-
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ApiError> handleCustomException(CustomException exception,
+    @ExceptionHandler(GeneralException.class)
+    public ResponseEntity<ApiError> handleCustomException(GeneralException exception,
                                                           HttpServletRequest request) {
-        ApiError apiError = new ApiError(exception.getErrorCode(),
-                exception.getMessage(),
-                request.getRequestURI(),
-                Instant.now());
+        ApiError apiError = ApiError
+                .builder()
+                .statusCode(exception.getHttpStatus().value())
+                .errorCode(exception.getErrorCode())
+                .path(request.getRequestURI())
+                .timestamp(Instant.now())
+                .build();
         return ResponseEntity
-                .status(exception.getErrorCode())
+                .status(exception.getHttpStatus().value())
+                .body(apiError);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException exception,
+                                                              HttpServletRequest request) {
+        List<ValidationError> errors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(ValidationErrorMapper::toValidationError)
+                .toList();
+
+        ApiError apiError = ApiError
+                .builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .errorCode("VALIDATION_ERROR")
+                .path(request.getRequestURI())
+                .timestamp(Instant.now())
+                .details(errors)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(apiError);
     }
 
@@ -154,7 +62,8 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 request.getRequestURI(),
-                Instant.now());
+                Instant.now(),
+                null);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(apiError);

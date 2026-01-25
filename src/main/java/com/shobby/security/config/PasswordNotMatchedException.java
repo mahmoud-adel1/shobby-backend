@@ -1,9 +1,10 @@
 package com.shobby.security.config;
 
-import com.shobby.common.exception.CustomException;
+import com.shobby.common.exception.ErrorCode;
+import com.shobby.common.exception.GeneralException;
 
-public class PasswordNotMatchedException extends CustomException {
-    public PasswordNotMatchedException(String message) {
-        super(720, message);
+public class PasswordNotMatchedException extends GeneralException {
+    public PasswordNotMatchedException() {
+        super(ErrorCode.PASSWORD_NOT_MATCH);
     }
 }

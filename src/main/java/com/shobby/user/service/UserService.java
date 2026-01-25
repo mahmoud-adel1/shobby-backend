@@ -1,7 +1,6 @@
 package com.shobby.user.service;
 
-import com.shobby.common.exception.DatabaseErrorException;
-import com.shobby.auth.exception.UserNotFoundException;
+import com.shobby.auth.exception.AuthUserNotFoundException;
 import com.shobby.user.entity.User;
 import com.shobby.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class UserService {
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Invalid request due to data integrity constraints.");
         } catch (Exception e) {
-            throw new DatabaseErrorException(460,"Something went wrong. Please try again later.");
+            throw new RuntimeException();
         }
     }
 
@@ -55,7 +53,7 @@ public class UserService {
             userOptional.get().setEnabled(false);
             userRepository.save(userOptional.get());
         } else {
-            throw new UserNotFoundException("User not found.");
+            throw new AuthUserNotFoundException("User not found.");
         }
     }
 }

@@ -1,7 +1,12 @@
 package com.shobby.common.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
+
 import java.time.Instant;
 
-public record ApiError(int status, String error, String path, Instant timestamp) {
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record ApiError(int statusCode, String errorCode, String path, Instant timestamp, Object details) {
 
 }

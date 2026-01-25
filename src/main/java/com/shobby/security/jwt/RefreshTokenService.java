@@ -34,7 +34,7 @@ public class RefreshTokenService {
                 .opsForValue()
                 .get(PREFIX+username);
         if (storedToken == null) {
-            throw new InvalidRefreshTokenException("RefreshToken is invalid");
+            throw new RefreshTokenInvalidException();
         }
         return storedToken.equals(hash(token));
     }
@@ -52,7 +52,7 @@ public class RefreshTokenService {
                 return key.substring(PREFIX.length());
             }
         }
-        throw new InvalidRefreshTokenException("Invalid refresh token.");
+        throw new RefreshTokenInvalidException();
     }
 
     public String hash(String token) {

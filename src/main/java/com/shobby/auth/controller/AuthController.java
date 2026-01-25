@@ -9,9 +9,8 @@ import com.shobby.auth.dto.response.LoginResponseDto;
 import com.shobby.auth.dto.response.RefreshResponseDto;
 import com.shobby.auth.dto.response.RegisterResponseDto;
 import com.shobby.auth.service.AuthService;
-import com.shobby.security.jwt.InvalidRefreshTokenException;
+import com.shobby.security.jwt.RefreshTokenInvalidException;
 import com.shobby.security.jwt.RefreshTokenService;
-import com.shobby.user.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,7 +92,7 @@ public class AuthController {
                 .filter(cookie -> cookie.getName().equals("refreshToken"))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(()->new InvalidRefreshTokenException("RefreshToken is invalid."));
+                .orElseThrow(()->new RefreshTokenInvalidException());
 
         RefreshResult refreshResult = authService.refresh(oldRefreshToken);
 
@@ -121,7 +119,7 @@ public class AuthController {
                 .filter(cookie -> cookie.getName().equals("refreshToken"))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(()->new InvalidRefreshTokenException("RefreshToken is invalid."));
+                .orElseThrow(()->new RefreshTokenInvalidException());
         refreshTokenService.revoke(refreshToken);
 
         ResponseCookie deleteCookie = ResponseCookie.from("refreshToken", "")
