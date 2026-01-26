@@ -38,5 +38,7 @@ public class Category {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
 
 }

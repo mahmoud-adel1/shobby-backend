@@ -9,4 +9,5 @@ import lombok.Setter;
 @Builder
 public class CategoryResult {
     private String name;
+    private boolean isEnabled;
 }

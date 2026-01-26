@@ -22,10 +22,20 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryResponse> getAllCategories() {
         List<CategoryResult> categoryResults = categoryService.getAllCategories();
+        return categoryResults
+                .stream()
+                .map(CategoryMapper::toResponse)
+                .toList();
+    }
+
+    @GetMapping("/enabled")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CategoryResponse> getAllEnabledCategories() {
+        List<CategoryResult> categoryResults = categoryService.getAllEnabledCategories();
         return categoryResults
                 .stream()
                 .map(CategoryMapper::toResponse)
@@ -56,9 +66,10 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long categoryId) {
-        categoryService.delete(categoryId);
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryResponse disable(@PathVariable long categoryId) {
+        CategoryResult categoryResult = categoryService.disable(categoryId);
+        return CategoryMapper.toResponse(categoryResult);
     }
 
 }

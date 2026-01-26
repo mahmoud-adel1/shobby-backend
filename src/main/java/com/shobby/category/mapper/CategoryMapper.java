@@ -26,6 +26,7 @@ public class CategoryMapper {
         return CategoryResult
                 .builder()
                 .name(category.getName())
+                .isEnabled(category.isEnabled())
                 .build();
     }
 
@@ -33,6 +34,7 @@ public class CategoryMapper {
         return CategoryResponse
                 .builder()
                 .name(categoryResult.getName())
+                .isEnabled(categoryResult.isEnabled())
                 .build();
     }
 
