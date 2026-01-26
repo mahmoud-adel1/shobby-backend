@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    @Query("SELECT c FROM Category c WHERE isEnabled is true")
+    @Query("SELECT c FROM Category c WHERE c.isEnabled is true")
     List<Category> findAllEnabledCategories();
     boolean existsByNameIgnoreCase(String name);
 }
