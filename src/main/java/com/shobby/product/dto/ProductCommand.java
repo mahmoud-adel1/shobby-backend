@@ -10,9 +10,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCommand {
+    private String sku;
     private String name;
-    private long categoryId;
+    private String description;
+    private Long categoryId;
     private BigDecimal sellingPrice;
-    private int stockQuantity;
-
+    private BigDecimal costPrice;
 }

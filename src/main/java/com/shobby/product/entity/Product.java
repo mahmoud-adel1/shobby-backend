@@ -25,14 +25,20 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "sku", unique = true)
+    private String sku;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "selling_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal sellingPrice;
 
-    @Column(name = "stock_quantity", nullable = false)
-    private int stockQuantity;
+    @Column(name = "cost_price", precision = 10, scale = 2, nullable = false)
+    private BigDecimal costPrice;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)

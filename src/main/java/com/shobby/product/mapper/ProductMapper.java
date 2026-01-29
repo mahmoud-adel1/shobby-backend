@@ -11,29 +11,36 @@ public class ProductMapper {
     public static ProductCommand toCommand(ProductRequest productRequest) {
         return ProductCommand
                 .builder()
+                .sku(productRequest.getSku())
                 .name(productRequest.getName())
+                .description(productRequest.getDescription())
                 .categoryId(productRequest.getCategoryId())
                 .sellingPrice(productRequest.getSellingPrice())
-                .stockQuantity(productRequest.getStockQuantity())
+                .costPrice(productRequest.getCostPrice())
                 .build();
     }
 
     public static Product toEntity(ProductCommand productCommand) {
         return Product
                 .builder()
+                .sku(productCommand.getSku())
                 .name(productCommand.getName())
+                .description(productCommand.getDescription())
                 .sellingPrice(productCommand.getSellingPrice())
-                .stockQuantity(productCommand.getStockQuantity())
+                .costPrice(productCommand.getCostPrice())
                 .build();
     }
 
     public static ProductResult toResult(Product product) {
         return ProductResult
                 .builder()
+                .id(product.getId())
+                .sku(product.getSku())
                 .name(product.getName())
+                .description(product.getDescription())
                 .categoryId(product.getCategory().getId())
                 .sellingPrice(product.getSellingPrice())
-                .stockQuantity(product.getStockQuantity())
+                .costPrice(product.getCostPrice())
                 .isEnabled(product.isEnabled())
                 .build();
     }
@@ -41,18 +48,21 @@ public class ProductMapper {
     public static ProductResponse toResponse(ProductResult productResult) {
         return ProductResponse
                 .builder()
+                .id(productResult.getId())
+                .sku(productResult.getSku())
                 .name(productResult.getName())
                 .categoryId(productResult.getCategoryId())
                 .sellingPrice(productResult.getSellingPrice())
-                .stockQuantity(productResult.getStockQuantity())
+                .costPrice(productResult.getCostPrice())
                 .isEnabled(productResult.isEnabled())
                 .build();
     }
 
     public static void updateProduct(Product product, ProductCommand productCommand) {
+        product.setSku(productCommand.getSku());
         product.setName(productCommand.getName());
+        product.setDescription(productCommand.getDescription());
         product.setSellingPrice(productCommand.getSellingPrice());
-        product.setStockQuantity(productCommand.getStockQuantity());
-        product.setEnabled(true);
+        product.setCostPrice(productCommand.getCostPrice());
     }
 }

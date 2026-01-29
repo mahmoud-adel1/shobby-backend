@@ -12,17 +12,23 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductRequest {
+
+    @NotBlank(message = "PRODUCT_SKU_REQUIRED")
+    private String sku;
+
     @NotBlank(message = "PRODUCT_NAME_REQUIRED")
     private String name;
 
     @NotNull(message = "CATEGORY_ID_REQUIRED")
     private Long categoryId;
 
-    @NotNull(message = "SELLING_PRICE_REQUIRED")
+    private String description;
+
+    @NotNull(message = "COST_PRICE_REQUIRED")
     @DecimalMin(value = "0.01", message = "SELLING_PRICE_POSITIVE_REQUIRED")
     private BigDecimal sellingPrice;
 
-    @NotNull(message = "STOCK_QUANTITY_REQUIRED")
-    @Min(value = 0, message = "POSITIVE_STOCK_QUANTITY_REQUIRED")
-    private Integer stockQuantity;
+    @NotNull(message = "COST_PRICE_REQUIRED")
+    @DecimalMin(value = "0.01", message = "COST_PRICE_POSITIVE_REQUIRED")
+    private BigDecimal costPrice;
 }

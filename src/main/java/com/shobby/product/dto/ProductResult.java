@@ -10,9 +10,12 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class ProductResult {
+    private Long id;
+    private String sku;
     private String name;
+    private String description;
     private long categoryId;
     private BigDecimal sellingPrice;
-    private int stockQuantity;
+    private BigDecimal costPrice;
     private boolean isEnabled;
 }
