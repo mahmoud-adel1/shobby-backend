@@ -30,10 +30,4 @@ public class Role {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
     private List<User> users;
 
-    public void addUser(User user) {
-        if (users == null) {
-            users = new ArrayList<>();
-        }
-        users.add(user);
-    }
 }
