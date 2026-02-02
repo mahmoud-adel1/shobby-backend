@@ -8,7 +8,6 @@ import com.shobby.product.entity.Product;
 import com.shobby.product.exception.EnabledProductNotFoundException;
 import com.shobby.product.exception.ProductNotFoundException;
 import com.shobby.product.exception.ProductSkuAlreadyExistsException;
-import com.shobby.product.exception.SellingPriceLowerThanCostPriceException;
 import com.shobby.product.mapper.ProductMapper;
 import com.shobby.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -84,7 +83,6 @@ public class ProductService {
     }
 
     public ProductResult create(ProductCommand productCommand) {
-        validatePrices(productCommand);
         if (productRepository.existsBySku(productCommand.getSku())) {
             throw new ProductSkuAlreadyExistsException();
         }
@@ -97,7 +95,6 @@ public class ProductService {
     }
 
     public ProductResult update(long productId, ProductCommand productCommand) {
-        validatePrices(productCommand);
         Category category = categoryService.getCategoryOrThrow(productCommand.getCategoryId());
         Product product = getProductOrThrow(productId);
 
@@ -132,12 +129,6 @@ public class ProductService {
     private Product getProductOrThrow(long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
-    }
-
-    private void validatePrices(ProductCommand productCommand) {
-        if (productCommand.getSellingPrice().compareTo(productCommand.getCostPrice()) <= 0) {
-            throw new SellingPriceLowerThanCostPriceException();
-        }
     }
 
 }

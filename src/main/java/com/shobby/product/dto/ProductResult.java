@@ -13,9 +13,9 @@ public class ProductResult {
     private Long id;
     private String sku;
     private String name;
+    private String imageUrl;
     private String description;
-    private long categoryId;
     private BigDecimal sellingPrice;
-    private BigDecimal costPrice;
+    private Long categoryId;
     private boolean isEnabled;
 }

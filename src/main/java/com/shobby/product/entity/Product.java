@@ -31,14 +31,14 @@ public class Product {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "description")
     private String description;
 
     @Column(name = "selling_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal sellingPrice;
-
-    @Column(name = "cost_price", precision = 10, scale = 2, nullable = false)
-    private BigDecimal costPrice;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)

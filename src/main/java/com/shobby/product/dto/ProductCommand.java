@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 public class ProductCommand {
     private String sku;
     private String name;
+    private String imageUrl;
     private String description;
-    private Long categoryId;
     private BigDecimal sellingPrice;
-    private BigDecimal costPrice;
+    private Long categoryId;
 }

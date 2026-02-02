@@ -19,16 +19,15 @@ public class ProductRequest {
     @NotBlank(message = "PRODUCT_NAME_REQUIRED")
     private String name;
 
-    @NotNull(message = "CATEGORY_ID_REQUIRED")
-    private Long categoryId;
+    private String imageUrl;
 
     private String description;
+
 
     @NotNull(message = "COST_PRICE_REQUIRED")
     @DecimalMin(value = "0.01", message = "SELLING_PRICE_POSITIVE_REQUIRED")
     private BigDecimal sellingPrice;
 
-    @NotNull(message = "COST_PRICE_REQUIRED")
-    @DecimalMin(value = "0.01", message = "COST_PRICE_POSITIVE_REQUIRED")
-    private BigDecimal costPrice;
+    @NotNull(message = "CATEGORY_ID_REQUIRED")
+    private Long categoryId;
 }

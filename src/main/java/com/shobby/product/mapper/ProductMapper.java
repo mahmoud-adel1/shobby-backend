@@ -13,10 +13,10 @@ public class ProductMapper {
                 .builder()
                 .sku(productRequest.getSku())
                 .name(productRequest.getName())
+                .imageUrl(productRequest.getImageUrl())
                 .description(productRequest.getDescription())
-                .categoryId(productRequest.getCategoryId())
                 .sellingPrice(productRequest.getSellingPrice())
-                .costPrice(productRequest.getCostPrice())
+                .categoryId(productRequest.getCategoryId())
                 .build();
     }
 
@@ -25,9 +25,9 @@ public class ProductMapper {
                 .builder()
                 .sku(productCommand.getSku())
                 .name(productCommand.getName())
+                .imageUrl(productCommand.getImageUrl())
                 .description(productCommand.getDescription())
                 .sellingPrice(productCommand.getSellingPrice())
-                .costPrice(productCommand.getCostPrice())
                 .build();
     }
 
@@ -37,10 +37,10 @@ public class ProductMapper {
                 .id(product.getId())
                 .sku(product.getSku())
                 .name(product.getName())
+                .imageUrl(product.getImageUrl())
                 .description(product.getDescription())
-                .categoryId(product.getCategory().getId())
                 .sellingPrice(product.getSellingPrice())
-                .costPrice(product.getCostPrice())
+                .categoryId(product.getCategory().getId())
                 .isEnabled(product.isEnabled())
                 .build();
     }
@@ -51,9 +51,9 @@ public class ProductMapper {
                 .id(productResult.getId())
                 .sku(productResult.getSku())
                 .name(productResult.getName())
-                .categoryId(productResult.getCategoryId())
+                .imageUrl(productResult.getImageUrl())
                 .sellingPrice(productResult.getSellingPrice())
-                .costPrice(productResult.getCostPrice())
+                .categoryId(productResult.getCategoryId())
                 .isEnabled(productResult.isEnabled())
                 .build();
     }
@@ -61,8 +61,8 @@ public class ProductMapper {
     public static void updateProduct(Product product, ProductCommand productCommand) {
         product.setSku(productCommand.getSku());
         product.setName(productCommand.getName());
+        product.setImageUrl(productCommand.getImageUrl());
         product.setDescription(productCommand.getDescription());
         product.setSellingPrice(productCommand.getSellingPrice());
-        product.setCostPrice(productCommand.getCostPrice());
     }
 }
