@@ -125,4 +125,8 @@ public class ProductService {
                 .orElseThrow(ProductNotFoundException::new);
     }
 
+    public boolean isProductAvailable(Long productId) {
+        return productRepository.existsById(productId);
+    }
+
 }
