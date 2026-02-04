@@ -1,5 +1,6 @@
 package com.shobby.product.dto;
 
+import com.shobby.category.dto.CategoryCommand;
 import lombok.*;
 
 import java.math.BigDecimal;

@@ -8,11 +8,17 @@ import com.shobby.product.mapper.ProductMapper;
 import com.shobby.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/products")
@@ -23,33 +29,14 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<ProductResponse> getAllProducts() {
+    public Page<ProductResponse> getAllEnabledProducts(
+            @PageableDefault(direction = Sort.Direction.ASC, sort = "id") Pageable pageable) {
         return productService
-                .getAllProducts()
-                .stream()
-                .map(ProductMapper::toResponse)
-                .toList();
-    }
-
-    @GetMapping("/enabled")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ProductResponse> getAllEnabledProducts() {
-        return productService
-                .getAllEnabledProducts()
-                .stream()
-                .map(ProductMapper::toResponse)
-                .toList();
+                .getAllEnabledProducts(pageable)
+                .map(ProductMapper::toResponse);
     }
 
     @GetMapping("/{productId}")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
-    public ProductResponse getProductById(@PathVariable long productId) {
-        return ProductMapper.toResponse(productService.getProductById(productId));
-    }
-
-    @GetMapping("/enabled/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public ProductResponse getEnabledProductById(@PathVariable long productId) {
         return ProductMapper.toResponse(productService.getEnabledProductById(productId));
@@ -57,38 +44,58 @@ public class ProductController {
 
     @GetMapping("/sku/{sku}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
-    public ProductResponse getProductBySku(@PathVariable String sku) {
-        return ProductMapper.toResponse(productService.getProductBySku(sku));
-    }
-
-    @GetMapping("/enabled/sku/{sku}")
-    @ResponseStatus(HttpStatus.OK)
     public ProductResponse getEnabledProductBySku(@PathVariable String sku) {
-        return ProductMapper.toResponse(productService.getEnabledProductBySku(sku));
+        ProductResult productResult = productService.getEnabledProductBySku(sku);
+        return ProductMapper.toResponse(productResult);
     }
 
     @GetMapping("/category/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<ProductResponse> getProductsByCategoryId(@PathVariable long categoryId) {
+    public Page<ProductResponse> getEnabledProductsByCategoryId(
+            @PathVariable long categoryId,
+            @PageableDefault(direction = Sort.Direction.ASC, sort = "id") Pageable pageable
+    ) {
         return productService
-                .getProductsByCategoryId(categoryId)
-                .stream()
-                .map(ProductMapper::toResponse)
-                .toList();
+                .getEnabledProductsByCategoryId(categoryId, pageable)
+                .map(ProductMapper::toResponse);
     }
 
-    @GetMapping("/enabled/category/{categoryId}")
+    @GetMapping("/admin")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductResponse> getEnabledProductsByCategoryId(@PathVariable long categoryId) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<ProductResponse> getAllProducts(
+            @PageableDefault(direction = Sort.Direction.ASC, sort = "id") Pageable pageable) {
         return productService
-                .getEnabledProductsByCategoryId(categoryId)
-                .stream()
-                .map(ProductMapper::toResponse)
-                .toList();
+                .getAllProducts(pageable)
+                .map(ProductMapper::toResponse);
     }
 
+    @GetMapping("/admin/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProductResponse getProductById(@PathVariable long productId) {
+        return ProductMapper.toResponse(productService.getProductById(productId));
+    }
+
+    @GetMapping("/admin/sku/{sku}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProductResponse getProductBySku(@PathVariable String sku) {
+        ProductResult productResult = productService.getProductBySku(sku);
+        return ProductMapper.toResponse(productResult);
+    }
+
+
+    @GetMapping("/admin/category/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<ProductResponse> getProductsByCategoryId(
+            @PathVariable long categoryId,
+            @PageableDefault(direction = Sort.Direction.ASC, sort = "id") Pageable pageable) {
+        return productService
+                .getProductsByCategoryId(categoryId, pageable)
+                .map(ProductMapper::toResponse);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,10 +1,12 @@
 package com.shobby.product.dto;
 
+import com.shobby.category.dto.CategoryResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,6 +18,8 @@ public class ProductResult {
     private String imageUrl;
     private String description;
     private BigDecimal sellingPrice;
-    private Long categoryId;
-    private boolean isEnabled;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private boolean enabled;
+    private CategoryResult categoryResult;
 }

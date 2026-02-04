@@ -15,20 +15,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "sku", unique = true)
+    @Column(name = "sku", unique = true, nullable = false)
     private String sku;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "image_url")
@@ -40,10 +40,6 @@ public class Product {
     @Column(name = "selling_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal sellingPrice;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
-    private Category category;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
@@ -53,5 +49,9 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @Column(name = "is_enabled")
-    private boolean isEnabled;
+    private boolean enabled;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private Category category;
 }

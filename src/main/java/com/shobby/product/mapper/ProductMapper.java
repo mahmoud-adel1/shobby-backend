@@ -1,6 +1,7 @@
 package com.shobby.product.mapper;
 
 
+import com.shobby.category.mapper.CategoryMapper;
 import com.shobby.product.dto.ProductCommand;
 import com.shobby.product.dto.ProductRequest;
 import com.shobby.product.dto.ProductResponse;
@@ -40,8 +41,10 @@ public class ProductMapper {
                 .imageUrl(product.getImageUrl())
                 .description(product.getDescription())
                 .sellingPrice(product.getSellingPrice())
-                .categoryId(product.getCategory().getId())
-                .isEnabled(product.isEnabled())
+                .createdAt(product.getCreatedAt())
+                .updatedAt(product.getUpdatedAt())
+                .enabled(product.isEnabled())
+                .categoryResult(CategoryMapper.toResult(product.getCategory()))
                 .build();
     }
 
@@ -52,9 +55,12 @@ public class ProductMapper {
                 .sku(productResult.getSku())
                 .name(productResult.getName())
                 .imageUrl(productResult.getImageUrl())
+                .description(productResult.getDescription())
                 .sellingPrice(productResult.getSellingPrice())
-                .categoryId(productResult.getCategoryId())
-                .isEnabled(productResult.isEnabled())
+                .createdAt(productResult.getCreatedAt())
+                .updatedAt(productResult.getUpdatedAt())
+                .enabled(productResult.isEnabled())
+                .categoryResponse(CategoryMapper.toResponse(productResult.getCategoryResult()))
                 .build();
     }
 
