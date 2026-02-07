@@ -15,9 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -115,7 +112,7 @@ public class ProductService {
         return ProductMapper.toResult(updatedProduct);
     }
 
-    private Product getProductByIdOrThrow(long productId) {
+    public Product getProductByIdOrThrow(long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
     }
@@ -123,10 +120,6 @@ public class ProductService {
     private Product getProductBySkuOrThrow(String sku) {
         return productRepository.findBySku(sku)
                 .orElseThrow(ProductNotFoundException::new);
-    }
-
-    public boolean isProductAvailable(Long productId) {
-        return productRepository.existsById(productId);
     }
 
 }
