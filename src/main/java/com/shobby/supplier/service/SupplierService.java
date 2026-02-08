@@ -83,5 +83,15 @@ public class SupplierService {
                 .orElseThrow(SupplierNotFoundException::new);
     }
 
+    public Supplier getEnabledSupplierOrThrow(Long supplierId) {
+        Supplier supplier = supplierRepository
+                .findById(supplierId)
+                .orElseThrow(SupplierNotFoundException::new);
+        if (!supplier.isEnabled()) {
+            throw new SupplierDisabledException();
+        }
+        return supplier;
+    }
+
 
 }
